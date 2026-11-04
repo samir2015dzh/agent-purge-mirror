@@ -15,11 +15,12 @@ jobs:
       SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
     steps:
       - name: Mirror upstream branches and tags
+        if: ${{ env.SYNC_TOKEN != '' }}
         run: |
           set -e
           git clone --bare https://github.com/ZiChuanLan/agent-purge.git upstream.git
           cd upstream.git
-          git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" '+refs/heads/*:refs/heads/*' '+refs/tags/*:refs/tags/*'
+          git push "https://x-access-token:${{ secrets.SYNC_TOKEN }}@github.com/${{ github.repository }}.git" '+refs/heads/*:refs/heads/*' '+refs/tags/*:refs/tags/*'
 
       - name: Sync fork samir2015dzh/agent-purge via merge-upstream
         if: ${{ env.SYNC_TOKEN != '' }}
